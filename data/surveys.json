@@ -1,0 +1,20 @@
+{
+    "surveyData" : [
+        {
+            "s_id" : 1,
+            "s_name": "IndiaMart"
+        },
+        {
+            "s_id" : 2,
+            "s_name": "Flipkart"
+        },
+        {
+            "s_id" : 3,
+            "s_name": "Amazon"
+        },
+        {
+            "s_id" : 4,
+            "s_name": "Myntra"
+        }
+    ]
+}
