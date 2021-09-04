@@ -37,6 +37,9 @@ const Tr = styled('tr')`
 const Td = styled('td')`
     color: ${colors.outerSpace};
     font-size: 18px;
+    .clr{
+        color: ${colors.blackRussian};
+    }
 `;
 
 const HomeComponent = ({
@@ -44,40 +47,26 @@ const HomeComponent = ({
 })=>{
     const [surveys, setSurveys] = useState([]);
     useEffect(()=>{
-        fetch('http://localhost:8008/getSurvey',{
-            method:"GET"
-        }).then(res => res.json()).then((data) =>{
-        }).catch(console.log)
-    });
-    /* {surveys.length > 0 &&
-                    surveys.map((survey)=>{
-                    return (<tr><td key={survey.s_id}>
-                        <Link to={`${match.url}survey/${survey.s_id}`}>{survey.s_name.toUpperCase()}</Link>
-                    </td></tr>);
-                    })
-                } */
+        if(surveys.length === 0){
+            fetch('http://localhost:8008/getSurvey',{
+                method:"GET"
+            }).then(res => res.json()).then((data) =>{
+                setSurveys(data);
+            }).catch(console.log)
+        }
+    },[surveys]);
+    let Values = surveys.length > 0 && surveys.map((element)=>{
+        return <Tr><Td key={element.s_id}><Link className="clr" to={`${match.url}survey/${element.s_id}`}>{element.s_name.toUpperCase()}</Link></Td></Tr>;
+    })
 
     return (
         <Container>
             <Tile>
                 <p><b>Current Surveys</b></p>
                 <TableContainer>
-                    <Tr><Td>A</Td></Tr>
-                    <Tr><Td>B</Td></Tr>
-                    <Tr><Td>C</Td></Tr>
-                
+                    {Values}   
                 </TableContainer>  
             </Tile>
-                
-            <Tile>
-                <p><b>Upcoming Surveys</b></p>
-                <TableContainer>
-                    <Tr><Td>A</Td></Tr>
-                    <Tr><Td>B</Td></Tr>
-                    <Tr><Td>C</Td></Tr>
-                </TableContainer> 
-            </Tile>
-             
             <Route exact path={`${match.url}survey/:surveyId`}/>   
         </Container>
     )

@@ -2,22 +2,52 @@ import React from 'react';
 import {NavLink} from 'react-router-dom';
 import SwitchComponent from '../../routes/routes';
 import LoginContext from '../../datamanager/_loginContext';
+import { colors } from '../../assets/common/colors';
+import {styled, setup} from "goober";
+setup(React.createElement);
+
+const Nav = styled('nav')`
+    width:100%;
+    height: auto;
+    background: ${colors.outerSpace};
+    overflow: hidden;
+`;
+
+const LinksContainer = styled('div')`
+    padding : 10px;
+`;
+
+const Ul = styled('ul')`
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    float:left;
+`;
+
+const Ulr = styled(Ul)`
+    float:right;
+`;
+
+const Li = styled('li')`
+    font-size: 18px;
+    margin: 0px 10px 0px 10px;
+    .clr{
+        color: ${colors.white};
+    }
+`;
 
 const ListItem = ({path,name})=>{
-    return (<li className="nav-item px-3">
-                <NavLink exact className="nav-link" to={path}>{name}</NavLink>
-        </li>);
+    return (<Li>
+                <NavLink className="clr" exact to={path}>{name}</NavLink>
+        </Li>);
 }
 
 export default function NavigationComponent(){
         return (
             <React.Fragment>
-                <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
-                    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarText">
-                        <ul className="navbar-nav mr-auto">
+                <Nav>
+                    <LinksContainer id="navbarText">
+                        <Ul>
                             <ListItem path="/" name="Home"/>
                             <ListItem path="/about" name="About"/>
                             <ListItem path="/dashboard" name="Dashboard"/>
@@ -29,8 +59,8 @@ export default function NavigationComponent(){
                                     }
                                 }
                             </LoginContext.Consumer>
-                        </ul>
-                        <ul className="navbar-nav ml-auto">
+                        </Ul>
+                        <Ulr>
                         <LoginContext.Consumer>
                                 {
                                     (data)=>{
@@ -39,9 +69,9 @@ export default function NavigationComponent(){
                                     }
                                 }
                         </LoginContext.Consumer>
-                        </ul>
-                    </div>
-                </nav>
+                        </Ulr>
+                    </LinksContainer>
+                </Nav>
                 <>
                   {SwitchComponent}
                 </>
