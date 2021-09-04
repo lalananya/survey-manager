@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React  from 'react';
 import {colors} from '../../../assets/common/colors';
 import {styled, setup} from "goober";
 setup(React.createElement);
