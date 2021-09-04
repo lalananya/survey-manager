@@ -21,6 +21,7 @@ export default function NavigationComponent(){
                             <ListItem path="/" name="Home"/>
                             <ListItem path="/about" name="About"/>
                             <ListItem path="/dashboard" name="Dashboard"/>
+                            <ListItem path="/createsurvey" name="Create Survey"/>
                             <LoginContext.Consumer>
                                 {
                                     (data)=>{

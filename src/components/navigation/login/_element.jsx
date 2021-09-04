@@ -40,13 +40,13 @@ handleClick,
 checkLogin,
 current})=>{
     return(<>
+        <Tile>
         <Container>
                 <div>
                     <Button name="admin" onClick={handleClick}>Admin</Button>{" "}
                     <Button name="user" onClick={handleClick}>User</Button>
                 </div>
         </Container>
-        <Tile>
             {current === 'admin' && <AdminComponent checkLogin={checkLogin}/>}
             {current === 'user' && <UserComponent checkLogin={checkLogin}/>}
         </Tile>  

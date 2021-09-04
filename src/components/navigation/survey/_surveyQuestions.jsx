@@ -1,85 +1,142 @@
-import {Component} from 'react';
+import React, {useState} from 'react';
+import {colors} from '../../../assets/common/colors';
+import {styled, setup} from "goober";
+setup(React.createElement);
+
+const Tile = styled("div")`
+    padding: 10px;
+    width: auto;
+    height: auto;
+    border: solid 1px;
+    border-radius: 8px;
+    border-color : ${colors.shark};
+    box-shadow: 0px 4px 4px 0px; 
+    margin: 20px;
+`;
+const FormContainer = styled('form')`
+    width:auto;
+    height:auto;
+    align-items: center;
+    padding: 20px;
+`;
+const Button = styled('button')`
+    width: fit-content;
+    color: white;
+    border: none;
+    background-color: ${colors.outerSpace};
+    box-shadow: 0px 2px 2px 0px ${colors.blackRussian};
+    border-radius: 5px;
+    margin: 20px;
+`;
+const Label = styled('label')`
+    font-size: 16px;
+    margin: 3px;
+    font-weight: bold;
+`;
+const InputGroup = styled('table')`
+    border-collapse: separate;
+    border-spacing: 0 1em;
+`;
+
+const TextArea = styled('textarea')`
+    width: 400px;
+    height: 100px;
+`;
 
 const SurveyQuestions = (props)=>{
     return(
-        <form className="mt-4">
-            Question
-            <input type="text" className="form-control" placeholder="Enter Question" name="question" value={props.data.question} onChange={props.handleChange} required></input>
-            <div className="mt-3">
-                <input className="form-control form-check-label mr-1" type="text" name="option1" value={props.data.option1} placeholder="Option 1" onChange={props.handleChange} required/>
-                <input className="form-control form-check-label mr-1" type="text" name="option2" value={props.data.option2} placeholder="Option 2"  onChange={props.handleChange} required/>
-                <input className="form-control form-check-label mr-1" type="text" name="option3" value={props.data.option3} placeholder="Option 3"  onChange={props.handleChange} required/>
-                <input className="form-control form-check-label mr-1" type="text" name="option4" value={props.data.option4} placeholder="Option 4"  onChange={props.handleChange} required/>
-            </div>
-        </form>
+        <FormContainer>
+            <InputGroup>
+                <tr><td><Label>QUESTION</Label></td></tr>
+                <tr><td><TextArea placeholder="Enter Question" name="question" value={props.data.question} onChange={props.handleChange} required></TextArea></td></tr>
+                <tr><td><Label>OPTIONS</Label></td></tr>
+                <tr>
+                    <td>
+                        <input type="text" name="option1" value={props.data.option1} placeholder="Option 1" onChange={props.handleChange} required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="option2" value={props.data.option2} placeholder="Option 2"  onChange={props.handleChange} required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="option3" value={props.data.option3} placeholder="Option 3"  onChange={props.handleChange} required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="option4" value={props.data.option4} placeholder="Option 4"  onChange={props.handleChange} required/>
+                    </td>
+                </tr>
+            </InputGroup>
+        </FormContainer>
     )
 }
 
-class SurveyForm extends Component { 
-    constructor(props){
-        super(props);
-        this.state = {
-            data:{question:"",option1:"",option2:"",option3:"",option4:""},
-            count : 1,
-            submit : false,
-        };
-        this.data = {};
-        this.data[this.props.surveyId] = [];
-        this.handleChange = this.handleChange.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-        this.createQuestionObject = this.createQuestionObject.bind(this);
-    }
-    createQuestionObject(){
+const SurveyForm = (props)=>{
+    const { surveyId,surveyName } = props;
+    const [count, setCount] = useState(1);
+    const [submit, setSubmit] = useState(false);
+    const [data, setData] = useState({
+        question : '',
+        option1 : '',
+        option2 : '',
+        option3 : '',
+        option4 : '',
+    });
+    const _data = {};
+    _data[surveyId] = [];
+
+    const createQuestionObject = ()=>{
         let obj = {
-            'q_id' : this.state.count,
-            'ques_text' : this.state.data.question,
+            'q_id' : count,
+            'ques_text' : data.question,
             'ans_det' : {
-                'a' : {'val':this.state.data.option1,'count' : 0},
-                'b' : {'val':this.state.data.option2,'count' : 0},
-                'c' : {'val':this.state.data.option3,'count' : 0},
-                'd' : {'val':this.state.data.option4,'count' : 0},
+                'a' : {'val':data.option1,'count' : 0},
+                'b' : {'val':data.option2,'count' : 0},
+                'c' : {'val':data.option3,'count' : 0},
+                'd' : {'val':data.option4,'count' : 0},
             }
         };
-        this.data[this.props.surveyId].push(obj);
-        sessionStorage.setItem(this.props.surveyId,JSON.stringify(this.data[this.props.surveyId])); 
+        _data[surveyId].push(obj);
+        sessionStorage.setItem(surveyId,JSON.stringify(_data[surveyId])); 
     }
-    handleChange(e){
+
+    const handleChange = (e)=>{
         let {name,value} = e.target;
-        let obj = {...this.state.data};
+        let obj = {...data};
         obj[name] = value;
-        this.setState({data:obj});
-    }
-    handleClick(e){
+        setData(obj);
+    };
+
+    const handleClick = (e)=>{
         if(e.target.name === 'next'){
-            this.createQuestionObject();
-            let obj = this.state;
-            obj.data = {question:"",option1:"",option2:"",option3:"",option4:""};
-            obj.count = obj.count + 1;
-            if(e.target.name === 'submit')obj.submit = true;
-            this.setState(obj);
+            createQuestionObject();
+            setData({question:"",option1:"",option2:"",option3:"",option4:""});
+            setCount(count + 1);
+            if(e.target.name === 'submit')setSubmit(true);
         }
         if(e.target.name === 'submit'){
-            let _data = {id:this.props.surveyId,data:JSON.parse(sessionStorage.getItem(this.props.surveyId))};
+            let data = {id:surveyId,data:JSON.parse(sessionStorage.getItem(surveyId))};
             //let _data ={method:'POST',headers : {'Content-Type' : 'application/json',},body : JSON.stringify(data)};
-            fetch(`http://localhost:8008/createSurveyData?surveydata=${JSON.stringify(_data)}`);
+            fetch(`http://localhost:8008/createSurveyData?surveydata=${JSON.stringify(data)}`);
         }
+    };
+    if(!submit){
+        return(
+            <Tile>
+                <h1>{surveyName}</h1>
+                {count !==-1}<SurveyQuestions data={data} count={count} handleChange={handleChange}/>
+                <Button name="submit" onClick={handleClick}>Submit</Button>
+                <Button name="next" onClick={handleClick}>Add Next</Button>
+            </Tile>
+        )
     }
-    render(){
-        if(this.state.submit === false){
-            return(
-                <div className="jumbotron">
-                    <h1>{this.props.surveyName}</h1>
-                    {this.state.count !==-1}<SurveyQuestions data={this.state.data} count={this.state.count} handleChange={this.handleChange}/>
-                    <button className="btn btn-secondary mt-3 mr-2" name="submit" onClick={this.handleClick}>Submit</button>
-                    <button className="btn btn-primary mt-3" name="next" onClick={this.handleClick}>Add Next</button>
-                </div>
-            )
-        }
-        else {
-            return <div></div>
-        }
-        
-    }  
+    else {
+        return <div></div>
+    }
 }
 
 export default SurveyForm;
