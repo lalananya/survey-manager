@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import BarchartwithQuestionComponent from './BarchartwithQuestionComponent';
+import NotFound from '../notfound';
 
 class DashboardComp extends Component {
   
@@ -35,8 +36,8 @@ class DashboardComp extends Component {
   render() {
     const {surveydata} = this.state;
     const surveykeys = Object.keys(surveydata); 
-    if(!(Object.keys(surveydata) && Object.keys(surveydata).length > 0)){
-      return <div>Something Went Wrong, Check Server !!</div>
+    if(!(Object.keys(surveydata) && Object.keys(surveydata).length === 0)){
+      return <NotFound/>
     }
     return (
        <>  
